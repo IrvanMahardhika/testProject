@@ -7,7 +7,7 @@
  */
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
 
 
 const App: () => React$Node = () => {
@@ -23,13 +23,20 @@ const App: () => React$Node = () => {
     setPassword(newText);
   }
 
+  const buttonPress = () => {
+
+  }
+
   return (
     <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }} >
       <View style={styles.screen}  >
         <Text >Username {username}</Text>
-        <TextInput  defaultValue={username} onChangeText={handleChangeUsername} />
+        <TextInput style={styles.input}  defaultValue={username} onChangeText={handleChangeUsername} />
         <Text >Password {password}</Text>
-        <TextInput  defaultValue={password} onChangeText={handleChangePassword} />
+        <TextInput style={styles.input}  defaultValue={password} onChangeText={handleChangePassword} />
+        <View style={styles.buttonContainer} >
+          <Button title="Hello" />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -40,6 +47,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 20
+  },
+  input: {
+    borderBottomColor: 'blue',
+    borderBottomWidth: 2
+  },
+  buttonContainer: {
+    marginTop: 10
   }
 });
 
