@@ -18,7 +18,7 @@ const App: () => React$Node = () => {
   const firstNumber = useRef('');
   const secondNumber = useRef('');
   const operationRecord = useRef('');
-  const result = useRef(0)
+  const result = useRef(0);
 
   const reset = () => {
     setCalculation('0');
@@ -53,7 +53,7 @@ const App: () => React$Node = () => {
       setCalculation('0');
     } else {
       try {
-        if ( sign === '+' || sign === '-' || sign === '/' || sign === '*' ) throw error;
+        if (sign === '+' || sign === '-' || sign === '/' || sign === '*') throw error;
         secondNumber.current = parseFloat(calculation);
         setCalculation('0');
         switch (true) {
@@ -78,7 +78,7 @@ const App: () => React$Node = () => {
         };
       } catch (error) {
         display.pop();
-      };  
+      };
     };
     switch (true) {
       case operation === '+':
@@ -99,6 +99,17 @@ const App: () => React$Node = () => {
     setDisplay(prevDisplay => [...prevDisplay, ...operation]);
   }
 
+  let numberButton = [];
+  for (let i = 1; i <=3; i++) {
+    let horizontalNumberButton = [];
+    for (let j = 1; j <=3; j++) {
+      let number = 9 - (3 * i) + j;
+      number = number.toString();
+      horizontalNumberButton.push(<TouchableOpacity style={styles.button} onPress={getNumber.bind(this, number )} ><Text style={styles.text} >{number}</Text></TouchableOpacity>)
+    };
+    numberButton.push(<View style={styles.row} >{horizontalNumberButton}</View>);
+  };
+
   return (
     <View style={styles.container} >
       <View style={styles.result} >
@@ -109,96 +120,32 @@ const App: () => React$Node = () => {
       </View>
       <View style={styles.buttonContainer} >
         <View style={styles.numbers} >
+          {numberButton}
           <View style={styles.row} >
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '7')} >
-                <Text style={styles.text} >7</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '8')} >
-                <Text style={styles.text} >8</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '9')} >
-                <Text style={styles.text} >9</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.row} >
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '4')} >
-                <Text style={styles.text} >4</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '5')} >
-                <Text style={styles.text} >5</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '6')} >
-                <Text style={styles.text} >6</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.row} >
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '1')} >
-                <Text style={styles.text} >1</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '2')} >
-                <Text style={styles.text} >2</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '3')} >
-                <Text style={styles.text} >3</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.row} >
-            <View style={styles.button} >
-              <TouchableOpacity >
-                <Text style={styles.text} onPress={reset} >C</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '0')} >
-                <Text style={styles.text} >0</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.button} >
-              <TouchableOpacity onPress={getNumber.bind(this, '.')} >
-                <Text style={styles.text} >.</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.button} onPress={reset} >
+              <Text style={styles.text} >C</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={getNumber.bind(this, '0')} >
+              <Text style={styles.text} >0</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={getNumber.bind(this, '.')} >
+              <Text style={styles.text} >.</Text>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.operations} >
-          <View style={styles.button} >
-            <TouchableOpacity onPress={calculate.bind(this, '*')} >
-              <Text style={styles.text} >*</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.button} >
-            <TouchableOpacity onPress={calculate.bind(this, '/')} >
-              <Text style={styles.text} >/</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.button} >
-            <TouchableOpacity onPress={calculate.bind(this, '-')} >
-              <Text style={styles.text} >-</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.button} >
-            <TouchableOpacity onPress={calculate.bind(this, '+')} >
-              <Text style={styles.text} >+</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={styles.button} onPress={calculate.bind(this, '*')} >
+            <Text style={styles.text} >*</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={calculate.bind(this, '/')} >
+            <Text style={styles.text} >/</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={calculate.bind(this, '-')} >
+            <Text style={styles.text} >-</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={calculate.bind(this, '+')} >
+            <Text style={styles.text} >+</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
