@@ -94,9 +94,9 @@ const MyCalculator = props => {
         for (let j = 1; j <=3; j++) {
             let number = 9 - (3 * i) + j;
             number = number.toString();
-            horizontalNumberButton.push(<TouchableOpacity style={styles.button} onPress={getNumber.bind(this, number )} ><Text style={styles.text} >{number}</Text></TouchableOpacity>)
+            horizontalNumberButton.push(<TouchableOpacity key={number} style={styles.button} onPress={getNumber.bind(this, number )} ><Text style={styles.text} >{number}</Text></TouchableOpacity>)
         };
-        numberButton.push(<View style={styles.row} >{horizontalNumberButton}</View>);
+        numberButton.push(<View key={i} style={styles.row} >{horizontalNumberButton}</View>);
     };
 
     return (

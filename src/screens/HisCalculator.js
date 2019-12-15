@@ -1,35 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Button } from 'react-native';
+import { jsxOpeningFragment, validate } from '@babel/types';
 
 const HisCalculator = props => {
 
+    const [resultText, setResultText] = useState('');
+    const [calcText, setCalcText] = useState('');
+    const operations = useRef(['DEL', '+', '-', '*', '/']);
+
+    const validate = () => {
+        const text = resultText;
+        switch (text.slice(-1)) {
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                return false
+            default:
+                break;
+        };
+        return true;
+    };
+
+    const calculateResult = () => {
+        const text = resultText;
+        // eval tidak boleh digunakan pada user input krn dapat men trigger function
+        // eval dapat digunakan disini karena user input nya dibatasi hanya angka dan tanda baca
+        setCalcText(eval(text));
+    };
+
+    const buttonPressed = (text) => {
+        if (text === '=') {
+            // jika validate() bernilai false maka calculateResult() tidak ada dijalankan
+            return validate() && calculateResult(resultText);
+        };
+        setResultText(prevText => prevText + text);
+    };
+
+    const operate = operation => {
+        switch (operation) {
+            case 'DEL':
+                const text = resultText.split('');
+                text.pop();
+                setResultText(text.join(''));
+                break;
+            case '+':
+            case '-':
+            case '*':
+            case '/':
+                const lastCharacter = resultText.split('').pop();
+                if (operations.current.indexOf(lastCharacter) !== -1) return;
+                if (resultText === '') return;
+                setResultText(prevText => prevText + operation);
+            default:
+                break;
+        };
+    };
+
     let rows = [];
-    let nums = [[1, 2, 3], [4, 5, 6], [7, 8, 9], [, 0, '=']];
+    let nums = [[1, 2, 3], [4, 5, 6], [7, 8, 9], ['.', 0, '=']];
     for (let i = 0; i < 4; i++) {
         let row = [];
         for (let j = 0; j < 3; j++) {
-            row.push(<TouchableOpacity style={styles.button} >
+            row.push(<TouchableOpacity key={nums[i][j]} onPress={buttonPressed.bind(this, nums[i][j])} style={styles.button} >
                 <Text style={styles.buttonText} >{nums[i][j]}</Text>
             </TouchableOpacity>);
         };
-        rows.push(<View style={styles.row} >{row}</View>)
+        rows.push(<View key={i} style={styles.row} >{row}</View>)
     };
-
-    let operations = ['+', '-', '*', '/'];
     let ops = [];
-    for (let i = 0; i < 4; i++) {
-        ops.push(<TouchableOpacity style={styles.button} >
-            <Text style={[styles.buttonText, styles.white]} >{operations[i]}</Text>
+    for (let i = 0; i < 5; i++) {
+        ops.push(<TouchableOpacity key={operations.current[i]} onPress={operate.bind(this, operations.current[i])} style={styles.button} >
+            <Text style={[styles.buttonText, styles.white]} >{operations.current[i]}</Text>
         </TouchableOpacity>);
     };
 
     return (
         <View style={styles.container} >
             <View style={styles.result} >
-                <Text style={styles.resultText} >11*11</Text>
+                <Text style={styles.resultText} >{resultText}</Text>
             </View>
             <View style={styles.calculation} >
-                <Text style={styles.calculationText} >121</Text>
+                <Text style={styles.calculationText} >{calcText}</Text>
             </View>
             <View style={styles.buttonContainer} >
                 <View style={styles.numbers} >
@@ -41,7 +93,6 @@ const HisCalculator = props => {
             </View>
         </View>
     );
-
 };
 
 const styles = StyleSheet.create({
@@ -50,13 +101,13 @@ const styles = StyleSheet.create({
     },
     result: {
         flex: 2,
-        backgroundColor: 'red',
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
     calculation: {
         flex: 1,
-        backgroundColor: 'green',
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'flex-end'
     },
@@ -66,12 +117,12 @@ const styles = StyleSheet.create({
     },
     numbers: {
         flex: 3,
-        backgroundColor: 'yellow'
+        backgroundColor: '#434343'
     },
     operation: {
         flex: 1,
         justifyContent: 'space-around',
-        backgroundColor: 'black'
+        backgroundColor: '#636363'
     },
     row: {
         flex: 1,
@@ -80,12 +131,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     resultText: {
-        fontSize: 30,
-        color: 'white'
+        fontSize: 30
     },
     calculationText: {
-        fontSize: 24,
-        color: 'white'
+        fontSize: 24
     },
     button: {
         flex: 1,
@@ -95,7 +144,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     buttonText: {
-        fontSize: 30
+        fontSize: 30,
+        color: 'white'
     },
     white: {
         color: 'white'
